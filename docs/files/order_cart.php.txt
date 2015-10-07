@@ -1,0 +1,55 @@
+<?php
+/**
+ * Класс управления таблицой order_cart
+ */
+class order_cart extends table implements interface_order_cart
+{
+    /**
+     * @var Integer id - auto_increment
+     */
+    private $id;
+    /**
+     * @var $id_product - ID товара. Таблица product.id=$id_product
+     */
+    private $id_product;
+    /**
+     * @var float $price - Цена товара. Таблица product.price=$price
+     */
+    private $price;
+    /**
+     * @var Integer  $count - Кол-во товаров. Таблица product.count=$count
+     */
+    private $count;
+    /**
+     * Название таблицы БД
+     *
+     * @var $table - string
+     */
+    protected $table = "order_cart";
+    /**
+     * Метод создания записи в таблице БД для таблицы - order_cart
+     *
+     * @var Integer  $id_product - ID товара. Таблица product.id=$id_product
+     * @var Float  $price - Цена товара. Таблица product.price=$price
+     * @var Integer  $count - Кол-во товаров. Таблица product.count=$count
+     */
+    public function create($id_product, $price, $count)
+    {
+        try
+        {
+            $sql = "INSERT INTO `{$this->table}` VALUES (NULL, :id_product, :price, :countProduct)";
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute(array(
+                ':id_product' => $id_product,
+                ':price' => $price,
+                ':countProduct' => $count
+            ));
+            echo "Запись добавлена ".$sql;
+        }
+        catch(PDOException $e)
+        {
+            echo "Ошибка добавления записи: {$this->table}" . $e->getMessage();
+        }
+    }
+}
+?>
